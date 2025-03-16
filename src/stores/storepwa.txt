@@ -1,0 +1,177 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+
+// Detectando o ambiente
+const isCapacitor = typeof Capacitor !== 'undefined'; // Verifica se estamos em um dispositivo nativo (Capacitor)
+
+let CapacitorSQLite: any;
+if (isCapacitor) {
+  CapacitorSQLite = require('@capacitor-community/sqlite'); // Importa o plugin SQLite do Capacitor
+}
+
+export interface Person {
+  id: string;
+  name: string;
+  totalDebts: number;
+}
+
+export interface DebtItem {
+  id: string;
+  personId: string;
+  description: string;
+  amount: number;
+  date: string;
+}
+
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(amount);
+};
+
+export const useDebtStore = defineStore('debts', () => {
+  const persons = ref<Person[]>([]);
+  const debts = ref<DebtItem[]>([]);
+
+  const initStore = async () => {
+    if (isCapacitor) {
+      // Inicializa o banco de dados SQLite no dispositivo
+      await CapacitorSQLite.create({ database: 'appDB' });
+
+      // Criação das tabelas
+      await CapacitorSQLite.execute({ statement: 'CREATE TABLE IF NOT EXISTS persons (id TEXT PRIMARY KEY, name TEXT)' });
+      await CapacitorSQLite.execute({ statement: 'CREATE TABLE IF NOT EXISTS debts (id TEXT PRIMARY KEY, personId TEXT, description TEXT, amount REAL, date TEXT)' });
+    } else {
+      // Carrega dados do localStorage no navegador
+      const savedPersons = localStorage.getItem('persons');
+      const savedDebts = localStorage.getItem('debts');
+
+      if (savedPersons) {
+        persons.value = JSON.parse(savedPersons);
+      }
+
+      if (savedDebts) {
+        debts.value = JSON.parse(savedDebts);
+      }
+    }
+  };
+
+  const saveStorage = async () => {
+    if (isCapacitor) {
+      // Salvando dados no SQLite
+      for (const person of persons.value) {
+        await CapacitorSQLite.execute({
+          statement: 'INSERT OR REPLACE INTO persons (id, name) VALUES (?, ?)',
+          values: [person.id, person.name],
+        });
+      }
+
+      for (const debt of debts.value) {
+        await CapacitorSQLite.execute({
+          statement: 'INSERT OR REPLACE INTO debts (id, personId, description, amount, date) VALUES (?, ?, ?, ?, ?)',
+          values: [debt.id, debt.personId, debt.description, debt.amount, debt.date],
+        });
+      }
+    } else {
+      // Salvando no localStorage
+      localStorage.setItem('persons', JSON.stringify(persons.value));
+      localStorage.setItem('debts', JSON.stringify(debts.value));
+    }
+  };
+
+  const loadPersons = async () => {
+    if (isCapacitor) {
+      const result = await CapacitorSQLite.query({ statement: 'SELECT * FROM persons' });
+      persons.value = result.values as { id: string; name: string }[];
+    } else {
+      const savedPersons = localStorage.getItem('persons');
+      persons.value = savedPersons ? JSON.parse(savedPersons) : [];
+    }
+  };
+
+  const addPerson = async (name: string) => {
+    const id = Date.now().toString();
+
+    const newPerson: Person = {
+      id,
+      name,
+      totalDebts: 0,
+    };
+
+    persons.value.push(newPerson);
+    await saveStorage();
+    return newPerson;
+  };
+
+  const removePerson = async (id: string) => {
+    persons.value = persons.value.filter((person) => person.id !== id);
+    debts.value = debts.value.filter((debt) => debt.personId !== id);
+    await saveStorage();
+  };
+
+  const updatePersonTotal = (personId: string) => {
+    persons.value = persons.value.map((p) =>
+      p.id === personId ? { ...p, totalDebts: getPersonTotal(personId).value } : p
+    );
+  };
+
+  const addDebt = async (personId: string, description: string, amount: number) => {
+    const newDebt: DebtItem = {
+      id: Date.now().toString(),
+      personId,
+      description,
+      amount,
+      date: new Date().toISOString(),
+    };
+
+    debts.value.push(newDebt);
+    updatePersonTotal(personId);
+    await saveStorage();
+    return newDebt;
+  };
+
+  const removeDebt = async (debtId: string) => {
+    debts.value = debts.value.filter((debt) => debt.id !== debtId);
+    await saveStorage();
+  };
+
+  const updateDebts = async (id: string, updates: Partial<DebtItem>) => {
+    debts.value = debts.value.map((debt) => (debt.id === id ? { ...debt, ...updates } : debt));
+    await saveStorage();
+  };
+
+  const totalDebts = computed(() => {
+    return debts.value.reduce((total, debt) => total + debt.amount, 0);
+  });
+
+  const getPersonById = computed(() => {
+    return (id: string) => persons.value.find((person) => person.id === id);
+  });
+
+  const getDebtsForPerson = computed(() => {
+    return (personId: string) => debts.value.filter((debt) => debt.personId === personId);
+  });
+
+  const getPersonTotal = (personId: string) => computed(() =>
+    getDebtsForPerson.value(personId).reduce((total, debt) => total + debt.amount, 0)
+  );
+
+  return {
+    persons,
+    debts,
+    getPersonById,
+    getDebtsForPerson,
+    getPersonTotal,
+    totalDebts,
+    addPerson,
+    removePerson,
+    updatePersonTotal,
+    addDebt,
+    removeDebt,
+    updateDebts,
+    saveStorage,
+    initStore,
+    loadPersons,
+  };
+})
