@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { ref, defineEmits } from 'vue';
 import ButtonApp from '@/components/ButtonApp.vue';
 import ModalApp from '@/components/ModalApp.vue';
-import { ref } from 'vue';
 import { useDebtStore } from '@/stores';
+
+const emit = defineEmits<{
+  (event: 'add-person', person: { id: string; name: string }): void;
+}>()
 
 const showAddDialog = ref(false)
 const newPersonName = ref('')
@@ -14,14 +18,14 @@ const openAddPersonDialog = () => {
 }
 
 const addPerson = () => {
-  if (!newPersonName.value.trim()) return
-  debtStore.addPerson(newPersonName.value.trim())
-  showAddDialog.value = false
+  if (!newPersonName.value.trim()) return;
+  debtStore.addPerson(newPersonName.value.trim());
+  emit('add-person', { id: Date.now().toString(), name: newPersonName.value.trim() });
+  showAddDialog.value = false;
 }
 </script>
 
 <template>
-
   <ButtonApp @click="openAddPersonDialog">Adicionar Pessoa</ButtonApp>
 
   <ModalApp :show="showAddDialog" @close="showAddDialog = false">
@@ -29,5 +33,4 @@ const addPerson = () => {
     <input v-model="newPersonName" placeholder="Nome da pessoa" />
     <button @click="addPerson">Adicionar</button>
   </ModalApp>
-
 </template>

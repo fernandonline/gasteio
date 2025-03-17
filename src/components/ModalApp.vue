@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-
-const { show } = defineProps<{ show: boolean }>();
-const emit = defineEmits(["close"]);
-
+const props = defineProps<{ show: boolean }>()
+const emit = defineEmits(["close"])
 </script>
 
 <template>
-  <div v-if="show" class="modal-overlay">
+  <div v-if="props.show" class="modal-overlay">
     <div class="modal-content">
       <slot></slot>
       <button @click="emit('close')">Fechar</button>

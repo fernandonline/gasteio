@@ -1,26 +1,36 @@
 <script setup lang="ts">
-import {useDebtStore} from '@/stores';
 import ButtonApp from '@/components/ButtonApp.vue';
 
-const debtStore = useDebtStore()
+defineProps<{ persons: { id: string; name: string }[] }>()
+
+const emit = defineEmits(['remove-person'])
 
 const removePerson = (personId: string) => {
-  debtStore.removePerson(personId)
+  emit('remove-person', personId)
 }
 </script>
 
 <template>
   <h2>Lista de Pessoas</h2>
-  <div v-for="person in debtStore.persons" :key="person.id" class="person-card">
+  <div v-for="person in persons" :key="person.id" class="person-card">
     <ul>
-      <li>{{ person.name }}</li>
+      <li>
+        {{ person.name }}
+        <ButtonApp class="red" @click="removePerson(person.id)">[X]</ButtonApp>
+      </li>
     </ul>
-    <ButtonApp class="red" @click="removePerson(person.id)">[X]</ButtonApp>
   </div>
 </template>
 
 <style scoped>
 .red {
   background: red;
+}
+
+.person-card ul {
+  color: white;
+  background-color: black;
+  border: 2px solid green;
+  margin: 5px;
 }
 </style>

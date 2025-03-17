@@ -1,38 +1,40 @@
 <script setup lang="ts">
 import ModalApp from '@/components/ModalApp.vue';
 import { ref } from 'vue';
-import { useDebtStore } from '@/stores'; // Importa a store
+import { useDebtStore } from '@/stores';
 
-const debtStore = useDebtStore(); // Usa a store
-const showAddExpenseDialog = ref(false);
-const expenseName = ref('');
-const expenseValue = ref('');
-const selectedPersonId = ref(''); // ID da pessoa para vincular o gasto
+const props = defineProps<{ person: { id: string } }>()
+const debtStore = useDebtStore()
+const showAddDebtDialog = ref(false)
+const debtName = ref('')
+const debtValue = ref('')
 
-const openAddExpenseDialog = (personId: string) => {
-  showAddExpenseDialog.value = true;
-  expenseName.value = '';
-  expenseValue.value = '';
-  selectedPersonId.value = personId; // Armazena o ID da pessoa
+const openAddDebtDialog = () => {
+  showAddDebtDialog.value = true
+  debtName.value = ''
+  debtValue.value = ''
 };
 
 const addExpense = () => {
-  if (!expenseName.value.trim() || !expenseValue.value || !selectedPersonId.value) return
+  const amount = Number(debtValue.value) || 0;
 
-  debtStore.addDebt(selectedPersonId.value, expenseName.value.trim(), parseFloat(expenseValue.value)); // Adiciona à store
-  showAddExpenseDialog.value = false
+  if (!debtName.value.trim()) {
+    alert('Preencha um nome válido');
+    return;
+  }
+
+  debtStore.addDebt(props.person.id, debtName.value.trim(), amount)
+  showAddDebtDialog.value = false;
 }
 </script>
 
 <template>
+  <button @click="openAddDebtDialog">Adicionar Gasto</button>
 
-  <button @click="openAddExpenseDialog(person.id)">Adicionar Gasto</button>
-
-  <ModalApp :show="showAddExpenseDialog" @close="showAddExpenseDialog = false">
+  <ModalApp :show="showAddDebtDialog" @close="showAddDebtDialog = false">
     <h2>Adicionar Gasto</h2>
-    <input v-model="expenseName" placeholder="Nome do gasto" />
-    <input v-model="expenseValue" type="number" placeholder="Valor" />
+    <input v-model="debtName" placeholder="Nome do gasto" />
+    <input v-model="debtValue" type="number" placeholder="Valor" />
     <button @click="addExpense">Adicionar</button>
   </ModalApp>
-
 </template>

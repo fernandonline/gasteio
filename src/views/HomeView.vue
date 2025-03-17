@@ -1,20 +1,25 @@
 <script setup lang="ts">
-import Header from '@/components/HeaderApp.vue';
+import HeaderApp from '@/components/HeaderApp.vue';
 import AddPerson from '@/components/AddPerson.vue';
 import PersonList from '@/components/PersonList.vue';
 import { ref } from 'vue';
 
-const persons = ref<{ id: number; name: string }[]>([])
+const persons = ref<{ id: string; name: string }[]>([]);
 
-const addPerson = (person: { id: number; name: string }) => {
-  persons.value.push(person) // Atualiza a lista ao receber o evento
-}
+const addPerson = (person: { id: string; name: string }) => {
+  persons.value.push(person)
+};
+
+const removePerson = (personId: string) => {
+  persons.value = persons.value.filter((p) => p.id !== personId)
+};
 </script>
 
 <template>
-  <Header/>
+  <HeaderApp />
   <main>
+    <!-- Escuta o evento add-person e chama a função addPerson -->
     <AddPerson @add-person="addPerson" />
-    <PersonList :persons="persons" />
+    <PersonList :persons="persons" @remove-person="removePerson" />
   </main>
 </template>
