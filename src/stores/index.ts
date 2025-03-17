@@ -47,6 +47,7 @@ export const useDebtStore = defineStore('debts', () => {
   const totalDebts = computed(() => {
     return debts.value.reduce((total, debt) => total + debt.amount, 0);
   })
+  console.log(totalDebts.value)
 
   const getPersonById = computed(() => {
     return (id: string) => persons.value.find((person: Person) => person.id === id);

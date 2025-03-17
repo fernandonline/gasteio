@@ -1,0 +1,155 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import { CapacitorSQLite } from '@capacitor-community/sqlite'; // Importação direta
+
+export interface Person {
+  id: string;
+  name: string;
+  totalDebts: number;
+}
+
+export interface DebtItem {
+  id: string;
+  personId: string;
+  description: string;
+  amount: number;
+  date: string;
+}
+
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(amount);
+};
+
+export const useDebtStore = defineStore('debts', () => {
+  const persons = ref<Person[]>([]);
+  const debts = ref<DebtItem[]>([]);
+
+  const initStore = async () => {
+    // Inicializa o banco de dados SQLite no dispositivo
+    await CapacitorSQLite.create({ database: 'appDB' });
+
+    // Criação das tabelas se não existirem
+    await CapacitorSQLite.execute({ statement: 'CREATE TABLE IF NOT EXISTS persons (id TEXT PRIMARY KEY, name TEXT)' });
+    await CapacitorSQLite.execute({ statement: 'CREATE TABLE IF NOT EXISTS debts (id TEXT PRIMARY KEY, personId TEXT, description TEXT, amount REAL, date TEXT)' });
+
+    // Carregar dados para memória
+    await loadPersons();
+    await loadDebts();
+  };
+
+  // Método para carregar as pessoas do banco de dados
+  const loadPersons = async () => {
+    const result = await CapacitorSQLite.query({ statement: 'SELECT * FROM persons' });
+    persons.value = result.values as Person[];
+  };
+
+  // Método para carregar as dívidas do banco de dados
+  const loadDebts = async () => {
+    const result = await CapacitorSQLite.query({ statement: 'SELECT * FROM debts' });
+    debts.value = result.values as DebtItem[];
+  };
+
+  const saveStorage = async () => {
+    // Salvando dados no SQLite
+    for (const person of persons.value) {
+      await CapacitorSQLite.execute({
+        statement: 'INSERT OR REPLACE INTO persons (id, name) VALUES (?, ?)',
+        values: [person.id, person.name],
+      });
+    }
+
+    for (const debt of debts.value) {
+      await CapacitorSQLite.execute({
+        statement: 'INSERT OR REPLACE INTO debts (id, personId, description, amount, date) VALUES (?, ?, ?, ?, ?)',
+        values: [debt.id, debt.personId, debt.description, debt.amount, debt.date],
+      });
+    }
+  };
+
+  const addPerson = async (name: string) => {
+    const id = Date.now().toString();
+
+    const newPerson: Person = {
+      id,
+      name,
+      totalDebts: 0,
+    };
+
+    persons.value.push(newPerson);
+    await saveStorage();
+    return newPerson;
+  };
+
+  const removePerson = async (id: string) => {
+    persons.value = persons.value.filter((person) => person.id !== id);
+    debts.value = debts.value.filter((debt) => debt.personId !== id);
+    await saveStorage();
+  };
+
+  const updatePersonTotal = (personId: string) => {
+    persons.value = persons.value.map((p) =>
+      p.id === personId ? { ...p, totalDebts: getPersonTotal(personId).value } : p
+    );
+  };
+
+  const addDebt = async (personId: string, description: string, amount: number) => {
+    const newDebt: DebtItem = {
+      id: Date.now().toString(),
+      personId,
+      description,
+      amount,
+      date: new Date().toISOString(),
+    };
+
+    debts.value.push(newDebt);
+    updatePersonTotal(personId);
+    await saveStorage();
+    return newDebt;
+  };
+
+  const removeDebt = async (debtId: string) => {
+    debts.value = debts.value.filter((debt) => debt.id !== debtId);
+    await saveStorage();
+  };
+
+  const updateDebts = async (id: string, updates: Partial<DebtItem>) => {
+    debts.value = debts.value.map((debt) => (debt.id === id ? { ...debt, ...updates } : debt));
+    await saveStorage();
+  };
+
+  const totalDebts = computed(() => {
+    return debts.value.reduce((total, debt) => total + debt.amount, 0);
+  });
+
+  const getPersonById = computed(() => {
+    return (id: string) => persons.value.find((person) => person.id === id);
+  });
+
+  const getDebtsForPerson = computed(() => {
+    return (personId: string) => debts.value.filter((debt) => debt.personId === personId);
+  });
+
+  const getPersonTotal = (personId: string) => computed(() =>
+    getDebtsForPerson.value(personId).reduce((total, debt) => total + debt.amount, 0)
+  );
+
+  return {
+    persons,
+    debts,
+    getPersonById,
+    getDebtsForPerson,
+    getPersonTotal,
+    totalDebts,
+    addPerson,
+    removePerson,
+    updatePersonTotal,
+    addDebt,
+    removeDebt,
+    updateDebts,
+    saveStorage,
+    initStore,
+  };
+});

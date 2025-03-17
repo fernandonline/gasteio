@@ -43,6 +43,10 @@ const removePerson = (personId: string) => {
   color: #000;
 }
 
+.person-container_card span {
+  font-weight: 600;
+}
+
 .btn-red {
   background: red;
 }
