@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import HomeView from '@/views/HomeView.vue';
 import { onMounted } from 'vue';
+import HeaderApp from './components/layout/HeaderApp.vue';
 import { useDebtStore } from '@/stores/index.ts';
 
 const debtStore = useDebtStore()
@@ -11,7 +11,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <HomeView/>
+  <HeaderApp/>
+  <RouterView/>
 </template>
 
 <style scoped>

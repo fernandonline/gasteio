@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ModalApp from '@/components/ModalApp.vue';
+import ModalApp from '../../components/elements/ModalApp.vue';
 import { ref } from 'vue';
 import { useDebtStore } from '@/stores';
 

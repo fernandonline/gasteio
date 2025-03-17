@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import PersonDeatails from '../components/containers/PersonDeatils.vue'
 import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
@@ -10,8 +11,17 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    {
+      path: '/person/:id',
+      name: 'personDetails',
+      component: PersonDeatails,
+    },
 
-    { path: '/:pathMatch(.*)*', component: NotFound }
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'notFound',
+      component: NotFound,
+    }
   ],
 })
 

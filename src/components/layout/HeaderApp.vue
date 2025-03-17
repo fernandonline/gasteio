@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { useDebtStore } from '../../stores';
 
+const debtStore = useDebtStore()
 </script>
 
 <template>
   <header class="header">
     <h1> gasteio </h1>
     <div class="total-card">
-      <span>Gasto total</span>
+      <span>Gasto total: R$ {{ debtStore.totalDebts }}</span>
     </div>
   </header>
 </template>
