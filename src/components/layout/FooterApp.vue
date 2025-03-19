@@ -9,7 +9,7 @@
 <style scoped>
 .rodape {
   background: green;
-  height: 15%;
+  height: 10%;
   text-align: center;
   color: #FFF;
 }

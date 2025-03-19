@@ -18,15 +18,12 @@ const emit = defineEmits(["click"]);
 </template>
 
 <style scoped>
+
 .btn {
-  background-color: #42b983;
-  color: white;
   border: none;
-  border-radius: 4px;
   padding: 8px 16px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
   transition: background-color 0.3s;
 }
 </style>

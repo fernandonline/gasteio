@@ -33,7 +33,7 @@ const addExpense = () => {
 </script>
 
 <template>
-  <button @click="openAddDebtDialog">Adicionar Gasto</button>
+  <button class="btn-open_modal" @click="openAddDebtDialog">Adicionar Gasto</button>
 
   <ModalApp :show="showAddDebtDialog" @close="showAddDebtDialog = false">
     <h2>Adicionar Gasto</h2>
@@ -41,5 +41,18 @@ const addExpense = () => {
     <input v-model="debtValue" type="number" placeholder="Valor" />
     <input v-model="debtDate" type="date"/>
     <button @click="addExpense">Adicionar</button>
+    <button @click="showAddDebtDialog=false"> cancelar </button>
   </ModalApp>
 </template>
+
+<style scoped>
+.btn-open_modal {
+  position: absolute;
+  bottom: 5em;
+  right: .5em;
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 8px 16px;
+  border: none;
+}
+</style>

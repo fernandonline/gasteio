@@ -11,3 +11,13 @@
   height: 100svh;
   width: 100svw;
 }
+
+:root {
+  --header-bg: #59CE8F;
+  --header-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --header-bg: #116D6E;
+  --header-text: rgb(229, 229, 229);
+}

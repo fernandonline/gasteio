@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import PersonDeatails from '../components/containers/PersonDeatils.vue'
+import PersonDeatails from '../components/layout/PersonDeatils.vue'
 import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({

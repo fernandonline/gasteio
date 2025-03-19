@@ -16,12 +16,12 @@ export interface DebtItem {
 }
 
 export const formatCurrency = (amount: number): string => {
-  const fixedAmount = amount.toFixed(2);
   return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(parseFloat(fixedAmount))
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
 }
+
 
 export const useDebtStore = defineStore('debts', () => {
   const persons = ref<Person[]>([]);

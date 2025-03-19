@@ -1,13 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{ show: boolean }>()
-const emit = defineEmits(["close"])
 </script>
 
 <template>
   <div v-if="props.show" class="modal-overlay">
     <div class="modal-content">
       <slot></slot>
-      <button @click="emit('close')">Fechar</button>
     </div>
   </div>
 </template>
@@ -26,8 +24,11 @@ const emit = defineEmits(["close"])
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
+  background: var(--header-bg);
+  color: var(--header-text);
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: .5em
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ButtonApp from '../../components/elements/ButtonApp.vue';
-import { useDebtStore } from '../../stores';
+import { useDebtStore, formatCurrency } from '../../stores';
 import { RouterLink } from 'vue-router';
 
 const debtStore = useDebtStore()
@@ -15,11 +15,10 @@ const removePerson = (personId: string) => {
 </script>
 
 <template>
-  <h2>Lista de Pessoas</h2>
   <div v-for="person in persons" :key="person.id" class="person-container">
     <router-link :to="`/person/${person.id}`" class="person-container_card">
       <span> {{ person.name }} </span>
-      <span> R$ {{ debtStore.getPersonTotal(person.id) }} </span>
+      <span> R$ {{ formatCurrency(debtStore.getPersonTotal(person.id).value) }} </span>
     </router-link>
     <ButtonApp class="btn-red" @click="removePerson(person.id)"> X </ButtonApp>
   </div>
@@ -40,7 +39,7 @@ const removePerson = (personId: string) => {
   padding: 10px;
   text-align: center;
   text-decoration: none;
-  color: #000;
+  color: var(--text);
 }
 
 .person-container_card span {
