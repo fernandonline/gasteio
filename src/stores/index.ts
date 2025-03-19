@@ -16,10 +16,11 @@ export interface DebtItem {
 }
 
 export const formatCurrency = (amount: number): string => {
+  const fixedAmount = amount.toFixed(2);
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  }).format(amount);
+  }).format(parseFloat(fixedAmount))
 }
 
 export const useDebtStore = defineStore('debts', () => {
@@ -47,18 +48,18 @@ export const useDebtStore = defineStore('debts', () => {
   const totalDebts = computed(() => {
     return debts.value.reduce((total, debt) => total + debt.amount, 0);
   })
-  console.log(totalDebts.value)
 
   const getPersonById = computed(() => {
     return (id: string) => persons.value.find((person: Person) => person.id === id);
   })
 
-  const getDebtsForPerson = computed(() => {
-    return (personId: string) => debts.value.filter((debt) => debt.personId === personId);
-  })
+  const getDebtsForPerson = (personId: string) => {
+    return debts.value.filter((debt) => debt.personId === personId);
+  };
+
 
   const getPersonTotal = (personId: string) => computed(() =>
-    getDebtsForPerson.value(personId).reduce((total, debt) => total + debt.amount, 0)
+    getDebtsForPerson(personId).reduce((total, debt) => total + debt.amount, 0)
   )
 
   const addPerson = (name: string) => {

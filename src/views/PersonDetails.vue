@@ -20,7 +20,7 @@ watch(() => route.params.id, (newId) => {
 <template>
   <div>
     <h2>Gastos de {{ person?.name }}</h2>
-    <p>Total: R$ {{ debtStore.getPersonTotal(personId) }}</p>
+    <p>Total: R$ {{ debtStore.getPersonTotal(personId) }} </p>
 
     <ul>
       <li v-for="debt in debts" :key="debt.id">

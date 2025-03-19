@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { useDebtStore } from '@/stores';
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import DebtForm from './DebtForm.vue';
 
 const route = useRoute();
 const debtStore = useDebtStore();
 
-const personId = ref(route.params.id as string)
-const person = ref(debtStore.getPersonById(personId.value))
-const debts = ref(debtStore.getDebtsForPerson(personId.value))
+const personId = ref(route.params.id as string);
+const person = ref(debtStore.getPersonById(personId.value));
+const debts = ref(debtStore.getDebtsForPerson(personId.value));
 
-watch(() => route.params.id, (newId) => {
-  personId.value = newId as string;
+watchEffect(() => {
   person.value = debtStore.getPersonById(personId.value);
   debts.value = debtStore.getDebtsForPerson(personId.value);
 })
