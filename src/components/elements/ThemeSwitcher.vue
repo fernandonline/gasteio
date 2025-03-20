@@ -1,11 +1,7 @@
-<template>
-  <button @click="toggleTheme">
-    {{ theme === "dark" ? "🌙 Dark" : "☀️ Light" }}
-  </button>
-</template>
-
 <script setup lang="ts">
 import { useTheme } from "../../stores/useTheme";
+import LightSun from "@/assets/svg/LightSun.vue";
+import DarkMoon from "@/assets/svg/DarkMoon.vue";
 
 const { theme, setTheme } = useTheme();
 
@@ -14,14 +10,18 @@ const toggleTheme = () => {
 };
 </script>
 
+<template>
+  <button @click="toggleTheme">
+    <DarkMoon v-if="theme === 'dark'" />
+    <LightSun v-else />
+  </button>
+</template>
+
 <style scoped>
 button {
-  padding: 10px;
   border: none;
   background: var(--primary-bg);
   color: var(--text-color);
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 5px;
 }
 </style>

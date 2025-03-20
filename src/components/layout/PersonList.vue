@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TrashImg from '@/assets/svg/trashImg.vue';
+import TrashImg from '@/assets/svg/TrashImg.vue';
 import ButtonApp from '../../components/elements/ButtonApp.vue';
 import { useDebtStore, formatCurrency } from '../../stores';
 import { RouterLink } from 'vue-router';
@@ -48,6 +48,7 @@ const removePerson = (personId: string) => {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 5px;
 }
 
 .category-container_card {
@@ -63,8 +64,12 @@ const removePerson = (personId: string) => {
 }
 
 .currency {
-  min-width: 35%;
+  min-width: 25%;
   height: auto;
   font-weight: 600;
+
+  @media screen and (min-width: 748px) {
+    min-width: 15%;
+  }
 }
 </style>

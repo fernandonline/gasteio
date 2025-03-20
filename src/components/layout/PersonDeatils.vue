@@ -2,9 +2,8 @@
 import { useRoute } from 'vue-router';
 import { useDebtStore, formatCurrency } from '@/stores';
 import { ref, watchEffect } from 'vue';
-import DebtForm from '../containers/DebtForm.vue';
 import ButtonApp from '@/components/elements/ButtonApp.vue';
-import TrashImg from '@/assets/svg/trashImg.vue';
+import TrashImg from '@/assets/svg/TrashImg.vue';
 
 const route = useRoute()
 const debtStore = useDebtStore()
@@ -34,9 +33,6 @@ watchEffect(() => {
 </script>
 
 <template>
-
-    <h2>Gastos em {{ person?.name }}</h2>
-    <DebtForm v-if="person" :person="person"/>
 
     <div class="debt-container" v-for="debt in debts" :key="debt.id">
 
@@ -70,6 +66,7 @@ watchEffect(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 5px;
 }
 
 .debt-container_details {
@@ -93,8 +90,12 @@ watchEffect(() => {
 }
 
 .details-currency {
-  min-width: 35%;
+  min-width: 25%;
   height: auto;
   font-weight: 600;
+
+  @media screen and (min-width: 748px) {
+    min-width: 15%;
+  }
 }
 </style>
