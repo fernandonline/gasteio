@@ -19,7 +19,7 @@ const openAddDebtDialog = () => {
   debtDate.value = currentDate
 }
 
-const addExpense = () => {
+const addDebt = () => {
   const amount = Number(debtValue.value) || 0;
 
   if (!debtName.value.trim()) {
@@ -33,26 +33,37 @@ const addExpense = () => {
 </script>
 
 <template>
-  <button class="btn-open_modal" @click="openAddDebtDialog">Adicionar Gasto</button>
+  <button class="btn-open_modal" @click="openAddDebtDialog"> + </button>
 
   <ModalApp :show="showAddDebtDialog" @close="showAddDebtDialog = false">
-    <h2>Adicionar Gasto</h2>
-    <input v-model="debtName" placeholder="Nome do gasto" />
-    <input v-model="debtValue" type="number" placeholder="Valor" />
-    <input v-model="debtDate" type="date"/>
-    <button @click="addExpense">Adicionar</button>
-    <button @click="showAddDebtDialog=false"> cancelar </button>
+    <h2 class="modal-title">Adicionar Gasto</h2>
+    <input class="modal-title_input" v-model="debtName" placeholder="Titulo" />
+    <input class="modal-title_input" v-model="debtValue" type="number" placeholder="R$" />
+    <input class="modal-title_input" v-model="debtDate" type="date"/>
+
+    <div class="modal-btn">
+      <button class="modal-btn_cancel" @click="showAddDebtDialog=false"> cancelar </button>
+      <button class="modal-btn_accept" @click="addDebt">Adicionar</button>
+    </div>
   </ModalApp>
 </template>
 
 <style scoped>
-.btn-open_modal {
-  position: absolute;
-  bottom: 5em;
-  right: .5em;
-  background: var(--header-bg);
-  color: var(--header-text);
-  padding: 8px 16px;
-  border: none;
+.modal-title {
+  padding: 15px 10px 0;
 }
+
+.modal-title_input {
+  padding: .8em;
+  border-radius: 5px;
+  margin: 3px 10px;
+  border: none;
+  font-size: 1em;
+}
+
+.modal-btn {
+  display: flex;
+}
+
+
 </style>

@@ -21,9 +21,7 @@ const emit = defineEmits(["click"]);
 
 .btn {
   border: none;
-  padding: 8px 16px;
+  background-color: transparent;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
 }
 </style>

@@ -18,7 +18,7 @@ const toggleTheme = () => {
 button {
   padding: 10px;
   border: none;
-  background: var(--bg-color);
+  background: var(--primary-bg);
   color: var(--text-color);
   cursor: pointer;
   font-size: 16px;

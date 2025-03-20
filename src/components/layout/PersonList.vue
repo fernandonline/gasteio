@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TrashImg from '@/assets/svg/trashImg.vue';
 import ButtonApp from '../../components/elements/ButtonApp.vue';
 import { useDebtStore, formatCurrency } from '../../stores';
 import { RouterLink } from 'vue-router';
@@ -15,38 +16,55 @@ const removePerson = (personId: string) => {
 </script>
 
 <template>
-  <div v-for="person in persons" :key="person.id" class="person-container">
-    <router-link :to="`/person/${person.id}`" class="person-container_card">
-      <span> {{ person.name }} </span>
-      <span> R$ {{ formatCurrency(debtStore.getPersonTotal(person.id).value) }} </span>
+  <div v-for="person in persons" :key="person.id" class="category-container">
+    <div>
+      <ButtonApp class="category-container_delete" @click="removePerson(person.id)">
+        <TrashImg/>
+      </ButtonApp>
+    </div>
+
+      <router-link :to="`/person/${person.id}`" class="category-container_card">
+        <span> {{ person.name }} </span>
+        <span class="currency"> R$ {{ formatCurrency(debtStore.getPersonTotal(person.id).value) }} </span>
     </router-link>
-    <ButtonApp class="btn-red" @click="removePerson(person.id)"> X </ButtonApp>
   </div>
 </template>
 
 
 
 <style scoped>
-.person-container {
-  display: flex;
-}
 
-.person-container_card {
+.category-container {
+  box-shadow: 0 0 12px var(--shadow-color);
+  border-radius: 8px;
   width: 100%;
-  display: block;
-  background-color: white;
-  border: 2px solid black;
-  padding: 10px;
-  text-align: center;
+  background-color: var(--list-bg);
+  display: flex;
+  padding: .5rem;
+  align-items: center;
+}
+
+.category-container_delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-container_card {
   text-decoration: none;
-  color: var(--text);
+  color: var(--list-color);
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0px 10px 10px;
+  font-size: 1.25rem;
+  text-overflow: ellipsis;
 }
 
-.person-container_card span {
+.currency {
+  min-width: 35%;
+  height: auto;
   font-weight: 600;
-}
-
-.btn-red {
-  background: red;
 }
 </style>

@@ -4,6 +4,7 @@ import { useDebtStore, formatCurrency } from '@/stores';
 import { ref, watchEffect } from 'vue';
 import DebtForm from '../containers/DebtForm.vue';
 import ButtonApp from '@/components/elements/ButtonApp.vue';
+import TrashImg from '@/assets/svg/trashImg.vue';
 
 const route = useRoute()
 const debtStore = useDebtStore()
@@ -33,21 +34,67 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div>
-    <h2>Gastos de {{ person?.name }}</h2>
-    <p>Total: R$ {{ formatCurrency(debtStore.getPersonTotal(personId).value) }}</p>
 
+    <h2>Gastos em {{ person?.name }}</h2>
     <DebtForm v-if="person" :person="person"/>
 
-    <ul>
-      <li v-for="debt in debts" :key="debt.id">
-        {{ debt.description }} - R$ {{ formatCurrency(debt.amount) }} | {{ formatDate(debt.date) }}
-        <ButtonApp class="btn-red" @click="removeDebt(debt.id)"> X </ButtonApp>
-      </li>
-    </ul>
-  </div>
+    <div class="debt-container" v-for="debt in debts" :key="debt.id">
+
+      <ButtonApp class="debt-container_delete" @click="removeDebt(debt.id)">
+        <TrashImg/>
+      </ButtonApp>
+
+      <div class="debt-container_details">
+        <span class="details-description">
+          {{ debt.description }}
+          <span class="details-date"> {{ formatDate(debt.date) }} </span>
+        </span>
+        <span class="details-currency"> R$ {{ formatCurrency(debt.amount) }} </span>
+      </div>
+
+    </div>
 </template>
 
 <style scoped>
+.debt-container {
+  box-shadow: 0 0 12px var(--shadow-color);
+  border-radius: 8px;
+  width: 100%;
+  background-color: var(--list-bg);
+  display: flex;
+  padding: .5rem;
+  align-items: center;
+}
 
+.debt-container_delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.debt-container_details {
+  color: var(--list-color);
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0px 6px 10px;
+  font-size: 1.25rem;
+}
+
+.details-description {
+  display: flex;
+  flex-direction: column;
+  text-overflow: ellipsis;
+}
+
+.details-date {
+  font-size: .7rem;
+}
+
+.details-currency {
+  min-width: 35%;
+  height: auto;
+  font-weight: 600;
+}
 </style>

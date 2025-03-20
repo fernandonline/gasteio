@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-VariableFont_opsz\,wght.ttf") format("truetype");
+  font-weight: 100 900;
+}
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,14 +17,56 @@
   flex-direction: column;
   height: 100svh;
   width: 100svw;
+  font-family: "Inter", sans-serif;
 }
 
 :root {
-  --header-bg: #59CE8F;
-  --header-text: #ffffff;
+  --primary-bg: #21A179;
+  --destaq-txt: #fff;
+  --accept-color: #116D6E;
+  --cancel-color: red;
+
+  --second-bg: #f8f8f9;
+  --list-bg: #fff;
+  --list-color: #000000;
+  --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
 [data-theme="dark"] {
-  --header-bg: #116D6E;
-  --header-text: rgb(229, 229, 229);
+  --second-bg: #121212;
+  --list-bg: #000;
+  --list-color: rgb(229, 229, 229);
+  --shadow-color: none;
+}
+
+.btn-open_modal {
+  position: absolute;
+  bottom: 3em;
+  right: .5em;
+  background: var(--primary-bg);
+  color: var(--destaq-txt);
+  font-size: 2em;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-btn_cancel, .modal-btn_accept {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  font-size: 1.1em;
+  color: var(--destaq-txt);
+}
+
+.modal-btn_accept {
+  border-bottom-right-radius: 8px;
+  background: var(--accept-color);
+}
+
+.modal-btn_cancel {
+  border-bottom-left-radius: 8px;
+  background: var(--cancel-color);
 }

@@ -24,5 +24,12 @@ onMounted(() => {
 <style scoped>
 main {
   height: 100svh;
+  background-color: var(--second-bg);
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3svw;
+  padding-top: 1rem;
 }
 </style>

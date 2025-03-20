@@ -24,8 +24,8 @@ const props = defineProps<{ show: boolean }>()
 }
 
 .modal-content {
-  background: var(--header-bg);
-  color: var(--header-text);
+  background: var(--primary-bg);
+  color: var(--destaq-txt);
   border-radius: 8px;
   display: flex;
   flex-direction: column;

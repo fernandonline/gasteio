@@ -31,13 +31,12 @@ watch(() => route.params.id, (newId) => {
 
 <style scoped>
 .header {
-  background-color: var(--header-bg);
-  color: var(--header-text);
+  background: var(--primary-bg);
+  color: var(--destaq-txt);
   height: 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
 
 .header-title {

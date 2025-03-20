@@ -24,34 +24,36 @@ const addPerson = () => {
 <template>
 
   <ModalApp :show="showAddDialog" @close="showAddDialog = false">
-    <h2>Adicionar Categoria</h2>
-    <input v-model="newPersonName" placeholder="Digite uma categoria" />
+    <h2 class="modal-title"> Nova Categoria</h2>
+    <input class="modal-title_input" v-model="newPersonName" placeholder="Digite uma categoria" />
     <div class="modal-btn">
-      <button @click="showAddDialog=false"> cancelar </button>
-      <button @click="addPerson">Adicionar</button>
+      <button class="modal-btn_cancel" @click="showAddDialog=false"> cancelar </button>
+      <button class="modal-btn_accept" @click="addPerson">Adicionar</button>
     </div>
   </ModalApp>
 
-  <ButtonApp class="btn-open_modal" @click="openAddPersonDialog">Adicionar Categoria</ButtonApp>
+  <ButtonApp class="btn-open_modal" @click="openAddPersonDialog"> + </ButtonApp>
 </template>
 
 <style scoped>
 .modal-btn {
-  border: 1px solid white;
   display: flex;
 }
 
-.modal-btn button {
-  flex: 1;
+.modal-title {
+  padding: 15px 10px 0;
+}
 
+.modal-title_input {
+  padding: .8em;
+  border-radius: 5px;
+  margin: 10px 10px;
+  border: none;
+  font-size: 1em;
 }
 
 .btn-open_modal {
-  position: absolute;
-  bottom: 5em;
-  right: .5em;
-  background: var(--header-bg);
-  color: var(--header-text);
+  background: var(--primary-bg);
 }
 </style>
 
