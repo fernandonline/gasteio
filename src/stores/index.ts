@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { Capacitor } from '@capacitor/core'
 import { SQLiteConnection, CapacitorSQLite, SQLiteDBConnection } from '@capacitor-community/sqlite'
 
 export interface Category {
@@ -29,14 +28,8 @@ export const useDebtStore = defineStore('debts', () => {
   const debts = ref<DebtItem[]>([]);
   let db: SQLiteDBConnection | null = null;
 
-  const isMobile = Capacitor.getPlatform() !== 'web'; // Detecta se está no mobile
-
   const initStore = async () => {
-    if (isMobile) {
-      await initSQLiteStore();
-    } else {
-      initLocalStorageStore();
-    }
+    await initSQLiteStore();
   }
 
   // Inicializa usando o SQLite
@@ -80,15 +73,9 @@ export const useDebtStore = defineStore('debts', () => {
     }
   }
 
-  // Inicializa usando o localStorage (web)
-  const initLocalStorageStore = () => {
-    categories.value = JSON.parse(localStorage.getItem('categories') || '[]');
-    debts.value = JSON.parse(localStorage.getItem('debts') || '[]');
-  }
-
-  // Salva dados na store (SQLite ou LocalStorage)
+  // Salva dados na store (SQLite)
   const saveStorage = async () => {
-    if (isMobile && db) {
+    if (db) {
       // Se for mobile, salva no SQLite
       await db.execute('DELETE FROM categories');
       categories.value.forEach(async (category) => {
@@ -101,10 +88,6 @@ export const useDebtStore = defineStore('debts', () => {
         await db!.run('INSERT INTO debts (id, categoryId, description, amount, date) VALUES (?, ?, ?, ?, ?)',
           [debt.id, debt.categoryId, debt.description, debt.amount, debt.date]);
       });
-    } else {
-      // Se for desktop (web), salva no localStorage
-      localStorage.setItem('categories', JSON.stringify(categories.value));
-      localStorage.setItem('debts', JSON.stringify(debts.value));
     }
   }
 
@@ -198,4 +181,4 @@ export const useDebtStore = defineStore('debts', () => {
     saveStorage,
     initStore,
   }
-});
+})

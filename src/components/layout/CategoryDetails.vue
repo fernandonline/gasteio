@@ -119,5 +119,6 @@ watchEffect(() => {
   height: 2em;
   border: none;
   cursor: pointer;
+  opacity: .8;
 }
 </style>

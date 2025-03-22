@@ -57,6 +57,7 @@
   height: 2em;
   border: none;
   cursor: pointer;
+  opacity: 0.82;
 }
 
 .modal-btn_cancel, .modal-btn_accept {
