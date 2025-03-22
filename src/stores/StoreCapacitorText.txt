@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { SQLite, SQLiteDatabase } from '@capacitor/sqlite'
+import { Capacitor } from '@capacitor/core'
+import { SQLiteConnection, CapacitorSQLite, SQLiteDBConnection } from '@capacitor-community/sqlite'
 
 export interface Category {
   id: string;
@@ -26,87 +27,75 @@ export const formatCurrency = (amount: number): string => {
 export const useDebtStore = defineStore('debts', () => {
   const categories = ref<Category[]>([]);
   const debts = ref<DebtItem[]>([]);
-  let db: SQLiteDatabase | null = null;
+  let db: SQLiteDBConnection | null = null;
 
-  // Inicializa a store e conecta ao banco SQLite
   const initStore = async () => {
     await initSQLiteStore();
   }
 
-  // Função para inicializar o banco SQLite
   const initSQLiteStore = async () => {
     try {
-      db = await SQLite.create({ name: 'debts.db', location: 'default' });
+      const sqlite = new SQLiteConnection(CapacitorSQLite);
+      db = await sqlite.createConnection("debts.db", false, "no-encryption", 1, false);
+      await db.open();
 
-      // Criação das tabelas, caso não existam
-      await db.executeSql(`
+      await db.execute(`
         CREATE TABLE IF NOT EXISTS categories (
           id TEXT PRIMARY KEY,
           name TEXT,
           totalDebts REAL
-        )
-      `);
-      await db.executeSql(`
+        );
         CREATE TABLE IF NOT EXISTS debts (
           id TEXT PRIMARY KEY,
           categoryId TEXT,
           description TEXT,
           amount REAL,
           date TEXT
-        )
+        );
       `);
 
-      // Carregar dados do SQLite
       await loadSQLiteData();
     } catch (error) {
-      console.error("Erro ao inicializar o SQLite:", error);
+      console.error("Erro ao inicializar SQLite:", error);
     }
   }
 
-  // Função para carregar os dados do banco SQLite
   const loadSQLiteData = async () => {
-    if (!db) return;
+    if (db) {
+      const categoryResult = await db.query('SELECT * FROM categories');
+      categories.value = categoryResult.values || [];
 
-    // Carregar categorias do SQLite
-    const categoryResult = await db.executeSql('SELECT * FROM categories');
-    categories.value = categoryResult.rows._array;
-
-    // Carregar dívidas do SQLite
-    const debtResult = await db.executeSql('SELECT * FROM debts');
-    debts.value = debtResult.rows._array;
+      const debtResult = await db.query('SELECT * FROM debts');
+      debts.value = debtResult.values || [];
+    }
   }
 
-  // Função para salvar os dados no SQLite
   const saveStorage = async () => {
-    if (!db) return;
+    if (db) {
+      await db.execute('DELETE FROM categories');
+      categories.value.forEach(async (category) => {
+        await db.run('INSERT INTO categories (id, name, totalDebts) VALUES (?, ?, ?)', 
+          [category.id, category.name, category.totalDebts]);
+      });
 
-    // Apagar as categorias e dívidas anteriores e inserir os novos dados
-    await db.executeSql('DELETE FROM categories');
-    categories.value.forEach(category => {
-      db.executeSql('INSERT INTO categories (id, name, totalDebts) VALUES (?, ?, ?)', [category.id, category.name, category.totalDebts]);
-    });
-
-    await db.executeSql('DELETE FROM debts');
-    debts.value.forEach(debt => {
-      db.executeSql('INSERT INTO debts (id, categoryId, description, amount, date) VALUES (?, ?, ?, ?, ?)', [debt.id, debt.categoryId, debt.description, debt.amount, debt.date]);
-    });
+      await db.execute('DELETE FROM debts');
+      debts.value.forEach(async (debt) => {
+        await db.run('INSERT INTO debts (id, categoryId, description, amount, date) VALUES (?, ?, ?, ?, ?)', 
+          [debt.id, debt.categoryId, debt.description, debt.amount, debt.date]);
+      });
+    }
   }
 
-  // Computed para calcular o total de todas as dívidas
   const totalDebts = computed(() => debts.value.reduce((total, debt) => total + debt.amount, 0));
 
-  // Função para obter uma categoria pelo id
   const getCategoryById = computed(() => (id: string) => categories.value.find(category => category.id === id));
 
-  // Função para obter todas as dívidas de uma categoria
   const getDebtsForCategory = (categoryId: string) => debts.value.filter(debt => debt.categoryId === categoryId);
 
-  // Função para calcular o total de dívidas por categoria
   const getCategoryTotal = (categoryId: string) => computed(() =>
     getDebtsForCategory(categoryId).reduce((total, debt) => total + debt.amount, 0)
-  )
+  );
 
-  // Função para adicionar uma categoria
   const addCategory = async (name: string) => {
     const newCategory: Category = { id: Date.now().toString(), name, totalDebts: 0 };
     categories.value.push(newCategory);
@@ -114,21 +103,18 @@ export const useDebtStore = defineStore('debts', () => {
     return newCategory;
   }
 
-  // Função para remover uma categoria
   const removeCategory = async (id: string) => {
     categories.value = categories.value.filter(category => category.id !== id);
     debts.value = debts.value.filter(debt => debt.categoryId !== id);
     await saveStorage();
   }
 
-  // Função para atualizar o total de dívidas de uma categoria
   const updateCategoryTotal = (categoryId: string) => {
     categories.value = categories.value.map(c =>
       c.id === categoryId ? { ...c, totalDebts: getCategoryTotal(categoryId).value } : c
     );
   }
 
-  // Função para adicionar uma dívida
   const addDebt = async (categoryId: string, description: string, amount: number) => {
     const newDebt: DebtItem = {
       id: Date.now().toString(),
@@ -144,7 +130,6 @@ export const useDebtStore = defineStore('debts', () => {
     return newDebt;
   }
 
-  // Função para remover uma dívida
   const removeDebt = async (debtId: string) => {
     const debt = debts.value.find(debt => debt.id === debtId);
     if (debt) {
@@ -154,7 +139,6 @@ export const useDebtStore = defineStore('debts', () => {
     }
   }
 
-  // Função para atualizar os dados de uma dívida
   const updateDebts = async (id: string, updates: Partial<DebtItem>) => {
     debts.value = debts.value.map(debt =>
       debt.id === id ? { ...debt, ...updates } : debt

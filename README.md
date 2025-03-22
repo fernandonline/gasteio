@@ -25,7 +25,7 @@ npm run build
 ```sh
 npx cap add android
 ```
-Sync
+### Sync Build
 
 ```sh
 npx cap sync android
