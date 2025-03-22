@@ -13,12 +13,11 @@ onMounted(() => {
 
 <template>
   <HeaderApp/>
-
   <main>
     <RouterView/>
   </main>
-
   <FooterApp/>
+
 </template>
 
 <style scoped>
@@ -31,5 +30,7 @@ main {
   align-items: center;
   gap: 3svw;
   padding-top: 1rem;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 </style>

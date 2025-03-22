@@ -55,7 +55,7 @@ const addDebt = () => {
   <ModalApp :show="showAddDebtDialog" @close="showAddDebtDialog = false">
     <h2 class="modal-title">Adicionar Gasto</h2>
     <input class="modal-title_input" v-model="debtName" placeholder="Titulo" />
-    <input class="modal-title_input" v-model="formattedDebtValue" placeholder="R$" />
+    <input class="modal-title_input" v-model="formattedDebtValue" type="tel" inputmode="decimal" placeholder="R$"/>
     <input class="modal-title_input" v-model="debtDate" type="date"/>
 
     <div class="modal-btn">
@@ -81,6 +81,4 @@ const addDebt = () => {
 .modal-btn {
   display: flex;
 }
-
-
 </style>

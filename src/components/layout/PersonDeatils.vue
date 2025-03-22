@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router';
 import { useDebtStore, formatCurrency } from '@/stores';
 import { ref, watchEffect } from 'vue';
+import DebtForm from '@/components/containers/DebtForm.vue';
 import ButtonApp from '@/components/elements/ButtonApp.vue';
 import TrashImg from '@/assets/svg/TrashImg.vue';
 
@@ -47,8 +48,9 @@ watchEffect(() => {
         </span>
         <span class="details-currency"> R$ {{ formatCurrency(debt.amount) }} </span>
       </div>
-
     </div>
+
+    <DebtForm v-if="person" :person="person"/>
 </template>
 
 <style scoped>
