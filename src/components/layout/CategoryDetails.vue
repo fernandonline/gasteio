@@ -9,9 +9,9 @@ import TrashImg from '@/assets/svg/TrashImg.vue';
 const route = useRoute()
 const debtStore = useDebtStore()
 
-const personId = ref(route.params.id as string)
-const person = ref(debtStore.getPersonById(personId.value))
-const debts = ref(debtStore.getDebtsForPerson(personId.value))
+const categoryId = ref(route.params.id as string)
+const category = ref(debtStore.getCategoryById(categoryId.value))
+const debts = ref(debtStore.getDebtsForCategory(categoryId.value))
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -28,8 +28,8 @@ const removeDebt = (debtId: string) => {
 
 
 watchEffect(() => {
-  person.value = debtStore.getPersonById(personId.value);
-  debts.value = debtStore.getDebtsForPerson(personId.value);
+  category.value = debtStore.getCategoryById(categoryId.value);
+  debts.value = debtStore.getDebtsForCategory(categoryId.value);
 })
 </script>
 
@@ -50,7 +50,7 @@ watchEffect(() => {
       </div>
     </div>
 
-    <DebtForm v-if="person" :person="person"/>
+    <DebtForm v-if="category" :category="category"/>
 </template>
 
 <style scoped>

@@ -6,21 +6,21 @@ import { ref, watch } from 'vue';
 const route = useRoute();
 const debtStore = useDebtStore();
 
-const personId = ref(route.params.id as string);
-const person = ref(debtStore.getPersonById(personId.value));
-const debts = ref(debtStore.getDebtsForPerson(personId.value));
+const categoryId = ref(route.params.id as string);
+const category = ref(debtStore.getCategoryById(categoryId.value));
+const debts = ref(debtStore.getDebtsForCategory(categoryId.value));
 
 watch(() => route.params.id, (newId) => {
-  personId.value = newId as string
-  person.value = debtStore.getPersonById(personId.value)
-  debts.value = debtStore.getDebtsForPerson(personId.value)
+  categoryId.value = newId as string
+  category.value = debtStore.getCategoryById(categoryId.value)
+  debts.value = debtStore.getDebtsForCategory(categoryId.value)
 })
 </script>
 
 <template>
   <div>
-    <h2>Gastos de {{ person?.name }}</h2>
-    <p>Total: R$ {{ debtStore.getPersonTotal(personId) }} </p>
+    <h2>Gastos de {{ category?.name }}</h2>
+    <p>Total: R$ {{ debtStore.getCategoryTotal(categoryId) }} </p>
 
     <ul>
       <li v-for="debt in debts" :key="debt.id">

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export interface Person {
+export interface Category {
   id: string;
   name: string;
   totalDebts: number;
@@ -9,7 +9,7 @@ export interface Person {
 
 export interface DebtItem {
   id: string;
-  personId: string;
+  categoryId: string;
   description: string;
   amount: number;
   date: string;
@@ -24,15 +24,15 @@ export const formatCurrency = (amount: number): string => {
 
 
 export const useDebtStore = defineStore('debts', () => {
-  const persons = ref<Person[]>([]);
+  const categories = ref<Category[]>([]);
   const debts = ref<DebtItem[]>([]);
 
   const initStore = () => {
-    const savedPersons = localStorage.getItem('persons');
+    const savedCategories = localStorage.getItem('categories');
     const savedDebts = localStorage.getItem('debts');
 
-    if (savedPersons) {
-      persons.value = JSON.parse(savedPersons);
+    if (savedCategories) {
+      categories.value = JSON.parse(savedCategories);
     }
 
     if (savedDebts) {
@@ -41,7 +41,7 @@ export const useDebtStore = defineStore('debts', () => {
   }
 
   const saveStorage = () => {
-    localStorage.setItem('persons', JSON.stringify(persons.value));
+    localStorage.setItem('categories', JSON.stringify(categories.value));
     localStorage.setItem('debts', JSON.stringify(debts.value));
   }
 
@@ -49,54 +49,54 @@ export const useDebtStore = defineStore('debts', () => {
     return debts.value.reduce((total, debt) => total + debt.amount, 0);
   })
 
-  const getPersonById = computed(() => {
-    return (id: string) => persons.value.find((person: Person) => person.id === id);
+  const getCategoryById = computed(() => {
+    return (id: string) => categories.value.find((category: Category) => category.id === id);
   })
 
-  const getDebtsForPerson = (personId: string) => {
-    return debts.value.filter((debt) => debt.personId === personId);
+  const getDebtsForCategory = (categoryId: string) => {
+    return debts.value.filter((debt) => debt.categoryId === categoryId);
   };
 
 
-  const getPersonTotal = (personId: string) => computed(() =>
-    getDebtsForPerson(personId).reduce((total, debt) => total + debt.amount, 0)
+  const getCategoryTotal = (categoryId: string) => computed(() =>
+    getDebtsForCategory(categoryId).reduce((total, debt) => total + debt.amount, 0)
   )
 
-  const addPerson = (name: string) => {
-    const newPerson: Person = {
+  const addCategory = (name: string) => {
+    const newCategory: Category = {
       id: Date.now().toString(),
       name,
       totalDebts: 0
     }
 
-    persons.value.push(newPerson);
+    categories.value.push(newCategory);
     saveStorage();
-    return newPerson;
+    return newCategory;
   }
 
-  const removePerson = (id: string) => {
-    persons.value = persons.value.filter(person => person.id !== id);
-    debts.value = debts.value.filter(debt => debt.personId !== id);
+  const removeCategory = (id: string) => {
+    categories.value = categories.value.filter(category => category.id !== id);
+    debts.value = debts.value.filter(debt => debt.categoryId !== id);
     saveStorage();
   }
 
-  const updatePersonTotal = (personId: string) => {
-    persons.value = persons.value.map(p =>
-      p.id === personId ? { ...p, totalDebts: getPersonTotal(personId).value } : p
+  const updateCategoryTotal = (categoryId: string) => {
+    categories.value = categories.value.map(c =>
+      c.id === categoryId ? { ...c, totalDebts: getCategoryTotal(categoryId).value } : c
     )
   }
 
-  const addDebt = (personId: string, description: string, amount: number) => {
+  const addDebt = (categoryId: string, description: string, amount: number) => {
     const newDebt: DebtItem = {
       id: Date.now().toString(),
-      personId,
+      categoryId,
       description,
       amount,
       date: new Date().toISOString(),
     }
 
     debts.value.push(newDebt);
-    updatePersonTotal(personId);
+    updateCategoryTotal(categoryId);
     saveStorage();
     return newDebt;
   }
@@ -105,7 +105,7 @@ export const useDebtStore = defineStore('debts', () => {
     const debt = debts.value.find(debt => debt.id === debtId);
     if (debt) {
       debts.value = debts.value.filter(debt => debt.id !== debtId);
-      updatePersonTotal(debt.personId);
+      updateCategoryTotal(debt.categoryId);
       saveStorage();
     }
   }
@@ -117,22 +117,22 @@ export const useDebtStore = defineStore('debts', () => {
 
     const updatedDebt = debts.value.find(debt => debt.id === id);
     if (updatedDebt) {
-      updatePersonTotal(updatedDebt.personId)
+      updateCategoryTotal(updatedDebt.categoryId)
     }
 
     saveStorage()
   }
 
   return {
-    persons,
+    categories,
     debts,
-    getPersonById,
-    getDebtsForPerson,
-    getPersonTotal,
+    getCategoryById,
+    getDebtsForCategory,
+    getCategoryTotal,
     totalDebts,
-    addPerson,
-    removePerson,
-    updatePersonTotal,
+    addCategory,
+    removeCategory,
+    updateCategoryTotal,
     addDebt,
     removeDebt,
     updateDebts,

@@ -7,10 +7,10 @@ import ThemeSwitcher from '../elements/ThemeSwitcher.vue';
 const route = useRoute()
 const debtStore = useDebtStore()
 
-const personId = ref<string | null>(null);
+const categoryId = ref<string | null>(null);
 
 watch(() => route.params.id, (newId) => {
-  personId.value = newId as string;
+  categoryId.value = newId as string;
 });
 </script>
 
@@ -27,7 +27,7 @@ watch(() => route.params.id, (newId) => {
 
         <span class="header-total_text"> gastos totais:</span>
         <span class="header-total_value">
-          R$ {{ formatCurrency(personId ? debtStore.getPersonTotal(personId).value : debtStore.totalDebts) }}
+          R$ {{ formatCurrency(categoryId ? debtStore.getCategoryTotal(categoryId).value : debtStore.totalDebts) }}
         </span>
 
       </div>

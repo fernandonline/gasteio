@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import AddPerson from '../components/containers/PersonForm.vue';
-import PersonList from '../components/layout/PersonList.vue';
+import AddCategory from '../components/containers/CategoryForm.vue';
+import CategoryList from '../components/layout/CategoriesList.vue';
 import { useDebtStore } from '@/stores';
 
 const debtStore = useDebtStore()
 
-const removePerson = (personId: string) => {
-  debtStore.removePerson(personId)
+const removeCategory = (categoryId: string) => {
+  debtStore.removeCategory(categoryId)
 }
 </script>
 
 <template>
-    <AddPerson/>
-    <PersonList :persons="debtStore.persons" @remove-person="removePerson" />
+    <AddCategory/>
+    <CategoryList :categories="debtStore.categories" @remove-category="removeCategory" />
 </template>

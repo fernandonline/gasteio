@@ -5,7 +5,7 @@ import { useDebtStore } from '@/stores';
 
 const currentDate = new Date().toISOString().split('T')[0]
 
-const props = defineProps<{ person: { id: string } }>()
+const props = defineProps<{ category: { id: string } }>()
 const debtStore = useDebtStore()
 const showAddDebtDialog = ref(false)
 const debtName = ref('')
@@ -44,7 +44,7 @@ const addDebt = () => {
     return
   }
 
-  debtStore.addDebt(props.person.id, debtName.value.trim(), amount)
+  debtStore.addDebt(props.category.id, debtName.value.trim(), amount)
   showAddDebtDialog.value = false
 }
 </script>

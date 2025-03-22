@@ -14,7 +14,4 @@ onMounted(() => {
       <p>
         A página que você está procurando não existe ou foi removida.
       </p>
-      <router-link to="/">
-        Voltar para página inicial
-      </router-link>
 </template>

@@ -6,26 +6,26 @@ import { RouterLink } from 'vue-router';
 
 const debtStore = useDebtStore()
 
-defineProps<{ persons: { id: string; name: string }[] }>()
+defineProps<{ categories: { id: string; name: string }[] }>()
 
-const emit = defineEmits(['remove-person'])
+const emit = defineEmits(['remove-category'])
 
-const removePerson = (personId: string) => {
-  emit('remove-person', personId)
+const removeCategory = (categoryId: string) => {
+  emit('remove-category', categoryId)
 }
 </script>
 
 <template>
-  <div v-for="person in persons" :key="person.id" class="category-container">
+  <div v-for="category in categories" :key="category.id" class="category-container">
     <div>
-      <ButtonApp class="category-container_delete" @click="removePerson(person.id)">
+      <ButtonApp class="category-container_delete" @click="removeCategory(category.id)">
         <TrashImg/>
       </ButtonApp>
     </div>
 
-      <router-link :to="`/person/${person.id}`" class="category-container_card">
-        <span> {{ person.name }} </span>
-        <span class="currency"> R$ {{ formatCurrency(debtStore.getPersonTotal(person.id).value) }} </span>
+      <router-link :to="`/category/${category.id}`" class="category-container_card">
+        <span> {{ category.name }} </span>
+        <span class="currency"> R$ {{ formatCurrency(debtStore.getCategoryTotal(category.id).value) }} </span>
     </router-link>
   </div>
 </template>

@@ -6,17 +6,17 @@ import { useDebtStore } from '../../stores';
 
 
 const showAddDialog = ref(false)
-const newPersonName = ref('')
+const newCategoryName = ref('')
 const debtStore = useDebtStore()
 
-const openAddPersonDialog = () => {
+const openAddCategoryDialog = () => {
   showAddDialog.value = true
-  newPersonName.value = ''
+  newCategoryName.value = ''
 }
 
-const addPerson = () => {
-  if (!newPersonName.value.trim()) return;
-  debtStore.addPerson(newPersonName.value.trim())
+const addCategory = () => {
+  if (!newCategoryName.value.trim()) return;
+  debtStore.addCategory(newCategoryName.value.trim())
   showAddDialog.value = false;
 }
 </script>
@@ -25,14 +25,14 @@ const addPerson = () => {
 
   <ModalApp :show="showAddDialog" @close="showAddDialog = false">
     <h2 class="modal-title"> Nova Categoria</h2>
-    <input class="modal-title_input" v-model="newPersonName" placeholder="Digite uma categoria" />
+    <input class="modal-title_input" v-model="newCategoryName" placeholder="Digite uma categoria" />
     <div class="modal-btn">
       <button class="modal-btn_cancel" @click="showAddDialog=false"> cancelar </button>
-      <button class="modal-btn_accept" @click="addPerson">Adicionar</button>
+      <button class="modal-btn_accept" @click="addCategory">Adicionar</button>
     </div>
   </ModalApp>
 
-  <ButtonApp class="btn-open_modal" @click="openAddPersonDialog"> + </ButtonApp>
+  <ButtonApp class="btn-open_modal" @click="openAddCategoryDialog"> + </ButtonApp>
 </template>
 
 <style scoped>
