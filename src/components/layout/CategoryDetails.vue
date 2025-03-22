@@ -5,6 +5,7 @@ import { ref, watchEffect } from 'vue';
 import DebtForm from '@/components/containers/DebtForm.vue';
 import ButtonApp from '@/components/elements/ButtonApp.vue';
 import TrashImg from '@/assets/svg/TrashImg.vue';
+import ArrowReturn from '@/assets/svg/ArrowReturn.vue';
 
 const route = useRoute()
 const debtStore = useDebtStore()
@@ -54,7 +55,9 @@ watchEffect(() => {
   </div>
 
   <router-link to="/">
-    <button class="btn-return"> ⮌ </button>
+    <button class="btn-return">
+      <ArrowReturn/>
+    </button>
   </router-link>
 </template>
 
