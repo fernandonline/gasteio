@@ -11,6 +11,10 @@ const removeCategory = (categoryId: string) => {
 </script>
 
 <template>
+  <div class="category-title">
+    <h2>categorias</h2>
+  </div>
+
     <AddCategory/>
     <CategoryList :categories="debtStore.categories" @remove-category="removeCategory" />
 </template>

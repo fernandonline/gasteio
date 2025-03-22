@@ -27,7 +27,7 @@ watch(() => route.params.id, (newId) => {
         {{ debt.description }} - R$ {{ debt.amount }}
       </li>
     </ul>
+  </div>
 
     <router-link to="/">Voltar</router-link>
-  </div>
 </template>

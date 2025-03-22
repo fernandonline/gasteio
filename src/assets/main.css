@@ -18,6 +18,7 @@
   height: 100svh;
   width: 100svw;
   font-family: "Inter", sans-serif;
+  user-select: none;
 }
 
 :root {
@@ -37,6 +38,11 @@
   --list-bg: #000;
   --list-color: rgb(229, 229, 229);
   --shadow-color: none;
+}
+
+.category-title {
+  width: 100%;
+  color: var(--list-color);
 }
 
 .btn-open_modal {

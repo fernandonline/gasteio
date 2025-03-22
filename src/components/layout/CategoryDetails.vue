@@ -34,26 +34,32 @@ watchEffect(() => {
 </script>
 
 <template>
-
-    <div class="debt-container" v-for="debt in debts" :key="debt.id">
-
-      <ButtonApp class="debt-container_delete" @click="removeDebt(debt.id)">
-        <TrashImg/>
-      </ButtonApp>
-
-      <div class="debt-container_details">
-        <span class="details-description">
-          {{ debt.description }}
-          <span class="details-date"> {{ formatDate(debt.date) }} </span>
-        </span>
-        <span class="details-currency"> R$ {{ formatCurrency(debt.amount) }} </span>
-      </div>
-    </div>
-
+  <div class="category-title">
     <DebtForm v-if="category" :category="category"/>
+    <h2>categorias / {{ category?.name }}</h2>
+  </div>
+
+  <div class="debt-container" v-for="debt in debts" :key="debt.id">
+    <ButtonApp class="debt-container_delete" @click="removeDebt(debt.id)">
+      <TrashImg/>
+    </ButtonApp>
+
+    <div class="debt-container_details">
+      <span class="details-description">
+        {{ debt.description }}
+        <span class="details-date"> {{ formatDate(debt.date) }} </span>
+      </span>
+      <span class="details-currency"> R$ {{ formatCurrency(debt.amount) }} </span>
+    </div>
+  </div>
+
+  <router-link to="/">
+    <button class="btn-return"> ⮌ </button>
+  </router-link>
 </template>
 
 <style scoped>
+
 .debt-container {
   box-shadow: 0 0 12px var(--shadow-color);
   border-radius: 8px;
@@ -99,5 +105,19 @@ watchEffect(() => {
   @media screen and (min-width: 748px) {
     min-width: 15%;
   }
+}
+
+.btn-return {
+  position: absolute;
+  bottom: 6.7em;
+  right: .8em;
+  background: var(--primary-bg);
+  color: var(--destaq-txt);
+  font-size: 1.6em;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  border: none;
+  cursor: pointer;
 }
 </style>
