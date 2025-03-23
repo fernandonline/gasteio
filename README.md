@@ -6,6 +6,11 @@ O Gasteio foi criado para simplificar o controle financeiro do seu dia a dia, e 
 [Baixar para Android](https://www.mediafire.com/file/y0659om1d9vw3ae/Gasteio.apk/file)
 | Versão: 1.0.0 | Data: 22/03/2025
 
+<div>
+    <img src="./resources/1742701013127.jpg" />    
+    <img src="./resources/1742701012885.jpg" />
+</div>
+
 ## Tecnologias Utilizadas
 
 - **IDE Recomendada**: [VSCode](https://code.visualstudio.com/) com extensão [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
