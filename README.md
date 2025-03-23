@@ -1,8 +1,8 @@
 ## Recommended IDE Setup
 
-- [VSCode](https://code.visualstudio.com/)
-- [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- [VSCode](https://code.visualstudio.com/) with [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 - typescript support
+- Android Studio
 
 ## Project Setup
 
