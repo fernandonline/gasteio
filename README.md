@@ -1,6 +1,7 @@
 # Gasteio
 
-Gasteio é um software mobile desenvolvido para gerenciar despesas pessoais ou familiares. Com ele, você pode adicionar diferentes categorias para organizar suas despesas de forma eficiente. Em cada categoria, é possível registrar suas despesas individualmente, com informações como título, data e valor. Na parte superior da interface, você pode visualizar o valor total acumulado de todas as categorias e verificar os gastos específicos ao acessar cada uma delas. O Gasteio foi pensado para facilitar o controle financeiro do seu dia a dia, e continuará evoluindo continuamente.
+Gasteio é um software mobile desenvolvido para facilitar o gerenciamento de despesas pessoais ou familiares. Com ele, você pode criar diferentes categorias para organizar suas despesas de forma prática e eficiente. Dentro de cada categoria, é possível registrar despesas individuais, incluindo detalhes como título, data e valor. Na interface principal, você pode visualizar o valor total acumulado de todas as categorias ou verificar os gastos específicos ao acessar cada uma delas. 
+O Gasteio foi criado para simplificar o controle financeiro do seu dia a dia, e continuará recebendo atualizações de interface e novas funcionalidades para oferecer uma experiência ainda mais completa.
 
 ## Tecnologias Utilizadas
 
@@ -42,3 +43,14 @@ npx cap sync android
 ```sh
 npx cap open android
 ```
+
+## Estrutura do Projeto
+
+├── src/                   # Código fonte principal do aplicativo
+│   ├── assets/            # Imagens, ícones e outros recursos estáticos
+│   ├── components/        # Componentes reutilizáveis do Vue Framework
+│   │   ├── containers/    # Base de formulários
+│   │   ├── elements/      # Elementos reutilizáveis (botões, inputs, etc.)
+│   │   └── layouts/       # Componentes de estrutura (header, footer, etc.)
+│   ├── stores/            # Gerenciamento de estado e lógica de negócios
+│   └── views/             # Telas principais da aplicação
