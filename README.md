@@ -7,8 +7,8 @@ O Gasteio foi criado para simplificar o controle financeiro do seu dia a dia, e 
 | Versão: 1.0.0 | Data: 22/03/2025
 
 <div>
-    <img src="./resources/1742701013127.jpg" />    
-    <img src="./resources/1742701012885.jpg" />
+    <img width=120 src="./resources/1742701013127.jpg" />    
+    <img width=120 src="./resources/1742701012885.jpg" />
 </div>
 
 ## Tecnologias Utilizadas
