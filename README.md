@@ -17,35 +17,30 @@ O Gasteio foi criado para simplificar o controle financeiro do seu dia a dia, e 
 npm install
 ```
 ### Iniciar o servidor de desenvolvimento
-
 ```sh
 npm run dev
 ```
 ### Compilação para produção
-
 ```sh
 npm run build
 ```
 
 ### Adicione a plataforma Android
-
 ```sh
 npx cap add android
 ```
 ### Sincronize o build com o Capacitor
-
 ```sh
 npx cap sync android
 ```
 
 ### Abra o projeto no Android Studio
-
 ```sh
 npx cap open android
 ```
 
 ## Estrutura do Projeto
-
+```
 ├── src/                   # Código fonte principal do aplicativo
 │   ├── assets/            # Imagens, ícones e outros recursos estáticos
 │   ├── components/        # Componentes reutilizáveis do Vue Framework
@@ -54,3 +49,4 @@ npx cap open android
 │   │   └── layouts/       # Componentes de estrutura (header, footer, etc.)
 │   ├── stores/            # Gerenciamento de estado e lógica de negócios
 │   └── views/             # Telas principais da aplicação
+```
