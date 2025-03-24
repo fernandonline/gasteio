@@ -3,8 +3,8 @@
 Gasteio é um software mobile desenvolvido para facilitar o gerenciamento de despesas pessoais ou familiares. Com ele, você pode criar diferentes categorias para organizar suas despesas de forma prática e eficiente. Dentro de cada categoria, é possível registrar despesas individuais, incluindo detalhes como título, data e valor. Na interface principal, você pode visualizar o valor total acumulado de todas as categorias ou verificar os gastos específicos ao acessar cada uma delas. 
 O Gasteio foi criado para simplificar o controle financeiro do seu dia a dia, e continuará recebendo atualizações de interface e novas funcionalidades para oferecer uma experiência ainda mais completa.
 
-[Baixar para Android](https://www.mediafire.com/file/y0659om1d9vw3ae/Gasteio.apk/file)
-| Versão: 1.0.0 | Data: 22/03/2025
+[Baixar para Android](https://www.mediafire.com/file/syqxa13h4b2c4et/Gasteio.apk/file)
+| Versão: 1.0.2 | Data: 23/03/2025
 
 <div>
     <img src="./resources/1742701013127.jpg" />    

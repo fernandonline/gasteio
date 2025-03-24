@@ -39,7 +39,7 @@ watch(() => route.params.id, (newId) => {
 .header {
   background: var(--primary-bg);
   color: var(--destaq-txt);
-  height: 35%;
+  min-height: 35%;
   display: flex;
   flex-direction: column;
   align-items: center;
