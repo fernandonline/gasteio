@@ -49,7 +49,7 @@
   position: absolute;
   bottom: 3em;
   right: .5em;
-  background: var(--primary-bg);
+  background-color: var(--primary-bg);
   color: var(--destaq-txt);
   font-size: 2em;
   border-radius: 50%;

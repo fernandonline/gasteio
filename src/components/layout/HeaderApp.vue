@@ -11,7 +11,7 @@ const categoryId = ref<string | null>(null);
 
 watch(() => route.params.id, (newId) => {
   categoryId.value = newId as string;
-});
+})
 </script>
 
 <template>
@@ -39,7 +39,7 @@ watch(() => route.params.id, (newId) => {
 .header {
   background: var(--primary-bg);
   color: var(--destaq-txt);
-  min-height: 35%;
+  min-height: 25vh;
   display: flex;
   flex-direction: column;
   align-items: center;

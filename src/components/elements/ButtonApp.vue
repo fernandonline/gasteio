@@ -7,13 +7,14 @@ const emit = defineEmits(["click"]);
 </script>
 
 <template>
-  <button
+  <circle
     class="btn"
     type="button"
     :disabled="props.disabled"
-    @click="emit('click')">
+    @click="emit('click')"
+  >
     <slot />
-  </button>
+  </circle>
 
 </template>
 
@@ -21,7 +22,9 @@ const emit = defineEmits(["click"]);
 
 .btn {
   border: none;
-  background-color: transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

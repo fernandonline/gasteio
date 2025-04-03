@@ -2,6 +2,7 @@
 import ModalApp from '../../components/elements/ModalApp.vue';
 import { computed, ref } from 'vue';
 import { useDebtStore } from '@/stores';
+import ButtonApp from '../elements/ButtonApp.vue';
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -50,7 +51,7 @@ const addDebt = () => {
 </script>
 
 <template>
-  <button class="btn-open_modal" @click="openAddDebtDialog"> + </button>
+  <ButtonApp class="btn-open_modal" @click="openAddDebtDialog"> + </ButtonApp>
 
   <ModalApp :show="showAddDebtDialog" @close="showAddDebtDialog = false">
     <h2 class="modal-title">Adicionar Gasto</h2>

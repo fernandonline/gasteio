@@ -1,20 +1,7 @@
 import { defineStore } from 'pinia'
+import type { Category, DebtItem } from './storeTypes'
 import { ref, computed } from 'vue'
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
-
-export interface Category {
-  id: string
-  name: string
-  totalDebts: number
-}
-
-export interface DebtItem {
-  id: string
-  categoryId: string
-  description: string
-  amount: number
-  date: string
-}
 
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('pt-BR', {

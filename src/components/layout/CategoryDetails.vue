@@ -36,13 +36,13 @@ watchEffect(() => {
 
 <template>
   <div class="category-title">
-    <DebtForm v-if="category" :category="category"/>
+    <DebtForm v-if="category" :category="category" />
     <h2>categorias / {{ category?.name }}</h2>
   </div>
 
   <div class="debt-container" v-for="debt in debts" :key="debt.id">
     <ButtonApp class="debt-container_delete" @click="removeDebt(debt.id)">
-      <TrashImg/>
+      <TrashImg />
     </ButtonApp>
 
     <div class="debt-container_details">
@@ -55,9 +55,9 @@ watchEffect(() => {
   </div>
 
   <router-link to="/">
-    <button class="btn-return">
-      <ArrowReturn/>
-    </button>
+    <ButtonApp class="btn-return">
+      <ArrowReturn />
+    </ButtonApp>
   </router-link>
 </template>
 
