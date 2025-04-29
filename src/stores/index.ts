@@ -75,14 +75,23 @@ export const useDebtStore = defineStore('debts', () => {
     )
   }
 
-  const addDebt = async (categoryId: string, description: string, amount: number) => {
+  const addDebt = async (categoryId: string, description: string, amount: number, date: string) => {
+    const getLocalDateString = () => {
+      const now = new Date()
+      const year = now.getFullYear()
+      const month = String(now.getMonth() + 1).padStart(2, '0')
+      const day = String(now.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    }
+
     const newDebt: DebtItem = {
       id: Date.now().toString(),
       categoryId,
       description,
       amount,
-      date: new Date().toISOString()
+      date: date || getLocalDateString(),
     }
+
     debts.value.push(newDebt)
     updateCategoryTotal(categoryId)
     await saveStorage()

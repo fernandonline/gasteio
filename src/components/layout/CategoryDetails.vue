@@ -1,21 +1,43 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { useDebtStore, formatCurrency } from '@/stores';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, computed } from 'vue';
 import DebtForm from '@/components/containers/DebtForm.vue';
 import ButtonApp from '@/components/elements/ButtonApp.vue';
 import TrashImg from '@/assets/svg/TrashImg.vue';
 import ArrowReturn from '@/assets/svg/ArrowReturn.vue';
+import type { DebtItem } from '@/stores/storeTypes';
 
 const route = useRoute()
 const debtStore = useDebtStore()
-
 const categoryId = ref(route.params.id as string)
 const category = ref(debtStore.getCategoryById(categoryId.value))
 const debts = ref(debtStore.getDebtsForCategory(categoryId.value))
 
+const groupedDebts = computed(() => {
+  const groups: Record<string, DebtItem[]> = {};
+
+  debts.value.forEach(debt => {
+    const dateKey = debt.date || 'Sem data';
+    if (!groups[dateKey]) {
+      groups[dateKey] = [];
+    }
+    groups[dateKey].push(debt);
+  });
+  return Object.entries(groups)
+    .sort(([dateA], [dateB]) => {
+      const parseDate = (d: string) => {
+        const [year, month, day] = d.split('-').map(Number)
+        return new Date(year, month - 1, day, 12).getTime()
+      }
+      return parseDate(dateB) - parseDate(dateA)
+    })
+    .map(([date, items]) => ({ date, items }));
+});
+
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
+  const [year, month, day] = dateString.split('-').map(Number)
+  const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
@@ -26,7 +48,6 @@ const formatDate = (dateString: string) => {
 const removeDebt = (debtId: string) => {
   debtStore.removeDebt(debtId);
 };
-
 
 watchEffect(() => {
   category.value = debtStore.getCategoryById(categoryId.value);
@@ -40,19 +61,21 @@ watchEffect(() => {
     <h2>categorias / {{ category?.name }}</h2>
   </div>
 
-  <div class="debt-container" v-for="debt in debts" :key="debt.id">
-    <ButtonApp class="debt-container_delete" @click="removeDebt(debt.id)">
-      <TrashImg />
-    </ButtonApp>
+  <section class="date-group" v-for="group in groupedDebts" :key="group.date">
+    <span class="debt-date"> {{ formatDate(group.date) }} <hr/> </span>
 
-    <div class="debt-container_details">
-      <span class="details-description">
-        {{ debt.description }}
-        <span class="details-date"> {{ formatDate(debt.date) }} </span>
-      </span>
-      <span class="details-currency"> R$ {{ formatCurrency(debt.amount) }} </span>
+    <div class="debt-container" v-for="debt in group.items" :key="debt.id">
+      <ButtonApp class="debt-container_delete" @click="removeDebt(debt.id)">
+        <TrashImg />
+      </ButtonApp>
+      <div class="debt-container_details">
+        <span class="details-description">
+          {{ debt.description }}
+        </span>
+        <span class="details-currency"> R$ {{ formatCurrency(debt.amount) }} </span>
+      </div>
     </div>
-  </div>
+  </section>
 
   <router-link to="/">
     <ButtonApp class="btn-return">
@@ -62,6 +85,30 @@ watchEffect(() => {
 </template>
 
 <style scoped>
+.debt-section {
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.debt-date {
+  font-size: 1rem;
+  color: var(--list-color);
+  display: flex;
+  align-items: center;
+}
+
+.debt-date hr {
+  position:fixed;
+  width: 60%;
+  right: 20px;
+}
+
+.date-group {
+  width: 100%;
+}
 
 .debt-container {
   box-shadow: 0 0 12px var(--shadow-color);
@@ -71,6 +118,7 @@ watchEffect(() => {
   display: flex;
   padding: .5rem;
   align-items: center;
+  margin-bottom: 0.5rem
 }
 
 .debt-container_delete {
@@ -94,10 +142,6 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   text-overflow: ellipsis;
-}
-
-.details-date {
-  font-size: .7rem;
 }
 
 .details-currency {

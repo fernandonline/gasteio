@@ -4,7 +4,13 @@ import { computed, ref } from 'vue';
 import { useDebtStore } from '@/stores';
 import ButtonApp from '../elements/ButtonApp.vue';
 
-const currentDate = new Date().toISOString().split('T')[0]
+const currentDate = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
 const props = defineProps<{ category: { id: string } }>()
 const debtStore = useDebtStore()
@@ -17,7 +23,7 @@ const openAddDebtDialog = () => {
   showAddDebtDialog.value = true
   debtName.value = ''
   debtValue.value = ''
-  debtDate.value = currentDate
+  debtDate.value = currentDate()
 }
 
 const formattedDebtValue = computed({
@@ -25,7 +31,6 @@ const formattedDebtValue = computed({
     if (!debtValue.value) return ''
     const onlyNumbers = debtValue.value.replace(/\D/g, '')
     const numberValue = parseFloat(onlyNumbers) / 100
-
     return new Intl.NumberFormat('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -33,19 +38,17 @@ const formattedDebtValue = computed({
   },
 
   set: (newValue) => {
-    debtValue.value = newValue.replace(/\D/g, '').replace(',', '.');
+    debtValue.value = newValue.replace(/\D/g, '');
   }
 })
 
 const addDebt = () => {
-  const amount = parseFloat(debtValue.value.replace(',', '.')) / 100 || 0
-
+  const amount = parseFloat(debtValue.value) / 100
   if (!debtName.value.trim()) {
     alert('Preencha um nome válido')
     return
   }
-
-  debtStore.addDebt(props.category.id, debtName.value.trim(), amount)
+  debtStore.addDebt(props.category.id, debtName.value.trim(), amount, debtDate.value)
   showAddDebtDialog.value = false
 }
 </script>

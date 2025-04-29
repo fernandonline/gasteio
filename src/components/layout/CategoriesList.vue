@@ -23,9 +23,9 @@ const removeCategory = (categoryId: string) => {
       </ButtonApp>
     </div>
 
-      <router-link :to="`/category/${category.id}`" class="category-container_card">
-        <span> {{ category.name }} </span>
-        <span class="currency"> R$ {{ formatCurrency(debtStore.getCategoryTotal(category.id).value) }} </span>
+    <router-link :to="`/category/${category.id}`" class="category-container_card">
+      <span> {{ category.name }} </span>
+      <span class="currency"> R$ {{ formatCurrency(debtStore.getCategoryTotal(category.id).value) }} </span>
     </router-link>
   </div>
 </template>
