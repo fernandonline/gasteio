@@ -29,6 +29,7 @@ const props = defineProps<{ show: boolean }>()
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: .5em
+  gap: .5em;
+  z-index: 2;
 }
 </style>

@@ -104,6 +104,7 @@ watchEffect(() => {
   position:fixed;
   width: 60%;
   right: 20px;
+  z-index: 1;
 }
 
 .date-group {
