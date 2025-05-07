@@ -5,12 +5,12 @@ O Gasteio foi criado para simplificar o controle financeiro do seu dia a dia, e 
 
 [Baixar para Android](https://www.mediafire.com/file/1xex298ygsoeozz/Gasteio.apk/file)
 | Versão: 1.2.1 | Data: 28/04/2025
-- log: pequenas correções de interface. ajustes na exibição de data.
+- log: pequenas correções de interface, agora aninha os gastos adicionados na mesma data. correção na data atual do dispositivo.
 
 <span>Versões anteriores</span>
 
 - 23/03/3035 1.0.0: versão de lancamento.
-- 25/03/2025 1.0.2: correção no banco de dados.
+- 25/03/2025 1.0.2: correção no armazenamento de dados locais.
 
 <div>
     <img width=120 src="./resources/1742701013127.jpg" />    
