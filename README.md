@@ -8,7 +8,7 @@ Gasteio é um software mobile desenvolvido para o gerenciamento de despesas pess
 
 <span>Registros anteriores</span>
 
-- 23/03/3035 1.0.0: versão de lancamento.
+- 23/03/2025 1.0.0: versão de lancamento.
 - 25/03/2025 1.0.2: correção no armazenamento de dados locais.
 
 <div>
